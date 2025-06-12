@@ -25,6 +25,7 @@ class ReportGenerator:
         
         c.drawString(100, y_position, "Personalized Note: Keep up the great work!")
         c.save()
+        return pdf_filename
 
     def calculate_completion_percentage(self, modules):
         completed_count = sum(1 for status in modules.values() if status == "Completed")

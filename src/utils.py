@@ -1,7 +1,9 @@
-def read_csv(file_path):
-    import pandas as pd
-    return pd.read_csv(file_path)
+import csv
 
+def read_csv(file_path):
+    with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        return [row for row in reader]
 def parse_student_data(data):
     student_data = []
     for index, row in data.iterrows():

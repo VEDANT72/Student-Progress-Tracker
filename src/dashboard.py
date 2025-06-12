@@ -1,29 +1,20 @@
 def generate_summary_dashboard(student_data):
-    total_students = len(student_data)
-    completed_students = 0
-    completion_percentages = []
-    top_students = []
+    summary = []
 
     for student in student_data:
-        modules = student[2:]  # Assuming first two columns are Name and Email
-        completed_count = modules.count("Completed")
-        completion_percentage = (completed_count / len(modules)) * 100
-        completion_percentages.append(completion_percentage)
+        name = student['Name']
+        email = student['Email']
+        modules = {k: v for k, v in student.items() if k not in ['Name', 'Email']}
+        completed = sum(1 for status in modules.values() if status.lower() == 'completed')
+        total = len(modules)
+        percentage = (completed / total) * 100 if total > 0 else 0
 
-        if completed_count == len(modules):
-            completed_students += 1
+        summary.append({
+            'Name': name,
+            'Email': email,
+            'Completed Modules': completed,
+            'Total Modules': total,
+            'Completion %': round(percentage, 2)
+        })
 
-        top_students.append((student[0], completion_percentage))  # (Name, Completion Percentage)
-
-    # Calculate overall average completion percentage
-    overall_average = sum(completion_percentages) / total_students if total_students > 0 else 0
-
-    # Get top 3 performing students
-    top_students.sort(key=lambda x: x[1], reverse=True)
-    top_students = top_students[:3]
-
-    return {
-        "overall_average": overall_average,
-        "top_students": top_students,
-        "completed_students_count": completed_students
-    }
+    return summary
